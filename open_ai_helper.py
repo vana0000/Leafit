@@ -1,8 +1,11 @@
 import openai
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Load OpenAI API key (you can also use dotenv here if needed)
-openai.api_key = os.environ.get('OPENAI_KEY')
+openai.api_key = "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"
 
 def get_book_recommendations(preferences):
     response = openai.ChatCompletion.create(
