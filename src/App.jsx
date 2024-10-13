@@ -6,6 +6,8 @@ import SignUp from './components/SignUp';
 import Dashboard from './pages/Dashboard';
 import Login from './components/Login';
 import logo from './assets/leafit.png';
+import Slideshow from './components/Slideshow'; // Import Slideshow
+import { Search, Bookmark, MessageCircle, Sparkles } from 'lucide-react'; // Icons
 
 // Modal Component
 const Modal = ({ show, onClose, children, width = 'w-96' }) => {
@@ -25,14 +27,27 @@ const Modal = ({ show, onClose, children, width = 'w-96' }) => {
   );
 };
 
+// FeatureCard Component
+const FeatureCard = ({ icon, title, description }) => {
+  return (
+    <div className="bg-gray-700 p-0.5 rounded-lg">
+      <div className="bg-gray-900 p-6 rounded-lg flex flex-col h-full">
+        <div className="flex justify-between items-start mb-4">
+          <h3 className="text-xl font-semibold text-white">{title}</h3>
+          {icon}
+        </div>
+        <p className="text-gray-400 text-sm flex-grow">{description}</p>
+      </div>
+    </div>
+  );
+};
+
 // Main App Component with Router integration
 function AppWrapper() {
   return (
     <Router>
       <Routes>
-        {/* Main route to the main App */}
         <Route path="/" element={<App />} />
-        {/* Route to Dashboard */}
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
@@ -91,7 +106,7 @@ function App() {
         <div className="flex items-center ml-9">
           <img
             src={logo}
-            alt="Leafit Logo"
+            alt="LeafIt Logo"
             className="w-36 h-auto"
           />
         </div>
@@ -108,13 +123,8 @@ function App() {
         <div className="container mx-auto px-4 pt-20 pb-4 flex-grow">
           <div className="flex flex-col md:flex-row items-center justify-between mb-16">
             <div className="md:w-1/2 mb-8 md:mb-0 relative">
-              <img
-                src="https://media.discordapp.net/attachments/1293755238246907906/1294796538421313739/Screenshot_2024-10-12_at_5.55.22_PM-removebg-preview.png"
-                width={700}
-                height={700}
-                alt="Book illustration"
-                className="mx-auto relative z-10 bottom-[-40px]"
-              />
+              {/* Slideshow is placed here */}
+              <Slideshow />
             </div>
             <div className="md:w-1/2 md:pl-8">
               <h1 className="text-5xl font-bold mb-4">Book smart.</h1>
@@ -135,7 +145,26 @@ function App() {
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Feature Cards */}
-              {/* Add your FeatureCard components here */}
+              <FeatureCard
+                icon={<Search className="text-gray-400" size={24} />}
+                title="Find"
+                description="Search and browse for new books – or find inspiration in other reader's libraries."
+              />
+              <FeatureCard
+                icon={<Bookmark className="text-gray-400" size={24} />}
+                title="Track"
+                description="Track every book by want to read, currently reading, read and did not finish."
+              />
+              <FeatureCard
+                icon={<MessageCircle className="text-gray-400" size={24} />}
+                title="Connect"
+                description="Explore others reader's bookshelves and follow for their next reads."
+              />
+              <FeatureCard
+                icon={<Sparkles className="text-gray-400" size={24} />}
+                title="Discover"
+                description="Use our set of amazing stats and tools, including AI, to discover new horizons in your reading journey."
+              />
             </div>
           </div>
         </div>
@@ -163,3 +192,4 @@ function App() {
 }
 
 export default AppWrapper;
+
