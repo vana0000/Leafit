@@ -18,7 +18,7 @@ const BookRecommendations = ({ onSignUp }) => {
         className="bg-[#5fbf00] px-4 py-2 rounded-md text-white hover:bg-[#4ea600] transition-transform transform hover:scale-105"
         onClick={onSignUp}  // This will open the SignUp modal
       >
-        Create an Account to Save Info
+        Dashboard
       </button>
     </div>
   );
