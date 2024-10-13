@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { Settings, Bell, Flame, X } from 'lucide-react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'; // Import calendar styles
+import React, { useState, useEffect } from 'react';
+import { Settings, Bell, Flame, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 const DashboardCard = ({ title, children, className }) => (
   <div className={`bg-gray-800 rounded-lg p-6 ${className}`}>
     {typeof title === 'string' ? <h2 className="text-2xl font-bold mb-4">{title}</h2> : title}
     {children}
+  </div>
+);
+
+const ReadingStreakDay = ({ day, date, isActive, isToday }) => (
+  <div className={`text-center p-2 rounded ${isActive ? 'bg-green-500' : 'bg-gray-700'} ${isToday ? 'bg-yellow-400' : ''}`}>
+    <div className="text-sm">{day}</div>
+    <div className="text-lg font-bold">{date}</div>
   </div>
 );
 
@@ -66,7 +71,44 @@ const JournalEntry = ({ isNewUser, onSave, onClose }) => {
   );
 };
 
-const Dashboard = () => {
+const Calendar = ({ activedays }) => {
+  const daysInOctober2024 = 31;
+  const firstDayOfOctober2024 = 2; // 0 is Sunday, 1 is Monday, etc. October 1, 2024 is a Tuesday
+
+  const days = Array.from({ length: daysInOctober2024 }, (_, i) => i + 1);
+  const emptyDays = Array.from({ length: firstDayOfOctober2024 }, (_, i) => i);
+
+  return (
+    <DashboardCard
+      title={
+        <div className="flex justify-between items-center mb-4">
+          <ChevronLeft className="text-gray-400 cursor-pointer" />
+          <h2 className="text-xl font-bold">October 2024</h2>
+          <ChevronRight className="text-gray-400 cursor-pointer" />
+        </div>
+      }
+    >
+      <div className="grid grid-cols-7 gap-2 text-center">
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+          <div key={day} className="text-gray-400 font-semibold">{day}</div>
+        ))}
+        {emptyDays.map(day => (
+          <div key={`empty-${day}`}></div>
+        ))}
+        {days.map(day => (
+          <div 
+            key={day} 
+            className={`p-2 rounded ${activedays.includes(day) ? 'bg-green-500' : 'hover:bg-gray-700'} cursor-pointer`}
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+    </DashboardCard>
+  );
+};
+
+const Dashboard = ({ logoUrl }) => {
   const [isJournalModalOpen, setIsJournalModalOpen] = useState(false);
   const [isNewUser, setIsNewUser] = useState(true);
   const [currentBook, setCurrentBook] = useState(null);
@@ -79,17 +121,66 @@ const Dashboard = () => {
   const tasks = ["Task 1", "Task 2", "Task 3"];
 
   // Reading Streak data
-  const currentStreak = 4;
-  const bestStreak = 69;
-  const currentDate = new Date(2024, 9, 12); // October 12, 2024
-  const activeDays = [6, 7, 8, 9, 10, 11, 12]; // Active days in October
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [activeDays, setActiveDays] = useState([]);
+
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const weekDates = Array.from({ length: 7 }, (_, i) => {
+    const date = new Date(currentDate);
+    date.setDate(currentDate.getDate() - currentDate.getDay() + i);
+    return date;
+  });
+
+  useEffect(() => {
+    // Update streaks when journal entries change
+    updateStreaks();
+  }, [journalEntries]);
+
+  const updateStreaks = () => {
+    let streak = 0;
+    let bestStreak = 0;
+    let currentStreak = 0;
+    let lastDate = null;
+
+    // Sort entries by date
+    const sortedEntries = [...journalEntries].sort((a, b) => a.date - b.date);
+
+    sortedEntries.forEach((entry) => {
+      const entryDate = new Date(entry.date);
+      if (lastDate) {
+        const dayDiff = (entryDate - lastDate) / (1000 * 60 * 60 * 24);
+        if (dayDiff === 1) {
+          currentStreak++;
+        } else {
+          bestStreak = Math.max(bestStreak, currentStreak);
+          currentStreak = 1;
+        }
+      } else {
+        currentStreak = 1;
+      }
+      lastDate = entryDate;
+    });
+
+    bestStreak = Math.max(bestStreak, currentStreak);
+
+    setCurrentStreak(currentStreak);
+    setBestStreak(bestStreak);
+
+    // Update active days
+    const newActiveDays = sortedEntries.map(entry => new Date(entry.date).getDate());
+    setActiveDays([...new Set(newActiveDays)]);
+  };
 
   const handleJournalEntry = (entry) => {
     if (isNewUser) {
       setCurrentBook(entry.book);
       setIsNewUser(false);
     }
-    setJournalEntries([...journalEntries, { ...entry, date: new Date() }]);
+    const entryDate = new Date();
+    setJournalEntries([...journalEntries, { ...entry, date: entryDate }]);
+    setCurrentDate(entryDate);
   };
 
   return (
@@ -97,11 +188,19 @@ const Dashboard = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
-          <div className="text-[#5fbf00] text-4xl font-bold">Leafit</div>
+          <div className="h-10 w-32">
+            <img src={logoUrl} alt="Leafit Logo" className="h-full w-full object-contain" />
+          </div>
           <div className="flex items-center space-x-4">
-            <Settings className="w-6 h-6 text-gray-400" />
-            <Bell className="w-6 h-6 text-gray-400" />
-            <div className="text-gray-400">@UserName</div>
+            <button className="text-gray-400 hover:text-white transition-colors">
+              <Settings className="w-6 h-6" />
+            </button>
+            <button className="text-gray-400 hover:text-white transition-colors">
+              <Bell className="w-6 h-6" />
+            </button>
+            <button className="text-gray-400 hover:text-white transition-colors">
+              @UserName
+            </button>
           </div>
         </header>
 
@@ -113,6 +212,7 @@ const Dashboard = () => {
             <DashboardCard>
               <div>
                 <h2 className="text-2xl font-bold mb-4">Hello <span className="text-[#5fbf00]">{userName}</span></h2>
+                <p className="text-gray-400 text-base font-normal mb-4">Ready to read?</p>
                 <button 
                   onClick={() => setIsJournalModalOpen(true)} 
                   className="bg-[#5fbf00] text-white px-4 py-2 rounded hover:bg-[#4ea600] transition-colors"
@@ -126,7 +226,7 @@ const Dashboard = () => {
             <DashboardCard 
               title={
                 <div className="flex items-center">
-                  <h2 className="text-2xl font-bold mb-4">Reading <span className="text-[#ff4500]">Streak</span></h2> <Flame className="ml-2 text-yellow-500" size={24} />
+                  Reading Streak <Flame className="ml-2 text-yellow-500" size={24} />
                 </div>
               }
             >
@@ -134,13 +234,21 @@ const Dashboard = () => {
                 <span>Current Streak: {currentStreak}</span>
                 <span>Best Streak: {bestStreak}</span>
               </div>
-              <Calendar
-                value={currentDate}
-                tileClassName={({ date }) =>
-                  activeDays.includes(date.getDate()) ? 'bg-green-500 text-white' : ''
-                }
-              />
+              <div className="grid grid-cols-7 gap-2">
+                {weekDays.map((day, index) => (
+                  <ReadingStreakDay
+                    key={day}
+                    day={day}
+                    date={weekDates[index].getDate()}
+                    isActive={activeDays.includes(weekDates[index].getDate())}
+                    isToday={index === currentDate.getDay()}
+                  />
+                ))}
+              </div>
             </DashboardCard>
+
+            {/* October Calendar */}
+            <Calendar activedays={activeDays} />
           </div>
 
           {/* Right Column */}
@@ -174,7 +282,7 @@ const Dashboard = () => {
               <ul className="space-y-2">
                 {journalEntries.slice(-3).reverse().map((entry, index) => (
                   <li key={index} className="text-gray-400">
-                    {entry.date.toLocaleDateString()}: Read {entry.pages} pages of {entry.book}
+                    {new Date(entry.date).toLocaleDateString()}: Read {entry.pages} pages of {entry.book}
                   </li>
                 ))}
               </ul>
