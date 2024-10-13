@@ -12,7 +12,15 @@ const JoinLeafit = ({ onDone }) => {
     setReadingGoals('');
     setReadingPreference('');
   };
-
+  const handleDone = () => {
+    const preferences = {
+      genres: [genre],
+      favorite_authors: [favoriteAuthor],
+      reading_goal: readingGoals,
+      reading_habits: readingPreference
+    };
+    onDone(preferences);
+  };
   return (
     <div className="text-center">
       <h2 className="text-2xl font-bold mb-4">Set Your Preferences</h2>
@@ -89,21 +97,22 @@ const JoinLeafit = ({ onDone }) => {
 
       {/* Buttons */}
       <div className="flex justify-between">
-        <button
-          className="text-[#5fbf00] hover:underline"
-          onClick={handleReset}
-        >
-          Reset to defaults
-        </button>
-        <button
-          className="bg-[#5fbf00] px-6 py-2 rounded-md text-white transition-transform transform hover:bg-[#4ea600] hover:scale-105"
-          onClick={onDone}  // Invoke the onDone function passed from App.jsx
-        >
-          Done
-        </button>
-      </div>
+    <button
+      className="text-[#5fbf00] hover:underline"
+      onClick={handleReset}
+    >
+      Reset to defaults
+    </button>
+    <button
+      className="bg-[#5fbf00] px-6 py-2 rounded-md text-white transition-transform transform hover:bg-[#4ea600] hover:scale-105"
+      onClick={handleDone}
+    >
+      Done
+    </button>
+    </div>
     </div>
   );
 };
 
 export default JoinLeafit;
+
