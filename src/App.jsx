@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Search, Bookmark, MessageCircle, Sparkles } from 'lucide-react';
 import JoinLeafit from './components/Joinleafit';
+import BookRecommendations from './components/BookRecommendations'; // Import BookRecommendations
+
 // Modal Component
 const Modal = ({ show, onClose, children }) => {
   if (!show) return null; // Don't render modal if 'show' is false
@@ -35,7 +37,14 @@ const FeatureCard = ({ icon, title, description }) => {
 };
 
 function App() {
-  const [showJoinModal, setShowJoinModal] = useState(false);  // Modal visibility state
+  const [showJoinModal, setShowJoinModal] = useState(false);  // Modal state for JoinLeafit
+  const [showRecommendationsModal, setShowRecommendationsModal] = useState(false);  // Modal state for BookRecommendations
+
+  // Handler when "Done" is clicked in JoinLeafit
+  const handleJoinDone = () => {
+    setShowJoinModal(false); // Close the JoinLeafit modal
+    setShowRecommendationsModal(true); // Show the BookRecommendations modal
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1f2937] via-[#030712] to-[#030712] text-white flex flex-col relative">
@@ -44,17 +53,17 @@ function App() {
         <div className="flex items-center ml-9">
           {/* Updated logo */}
           <img 
-            src="https://media.discordapp.net/attachments/1293755238246907906/1294822799294332973/leafit.png?ex=670c6933&is=670b17b3&hm=99d68e6fd1a2e915dcdfa9cacdda5b81bc1d4e722245e68911c2634e0c61ddc2&=&width=1598&height=590"
+            src="https://media.discordapp.net/attachments/1293755238246907906/1294822799294332973/leafit.png?ex=670c6933&is=670b17b3&hm=99d68e6fd1a2e915dcdfa9cacdda5b81bc1d4e722245e68911c2634e0c61ddc2&=&width=2012&height=744"
             alt="Leafit Logo"
             className="w-36 h-auto" // Adjust the size as needed
           />
           <span className="font-bold text-xl ml-2"></span> {/* Branding if needed */}
         </div>
         <div className="flex items-center space-x-4 mr-12">
-          {/* Only Login button remains, Join Leafit button removed */}
-          <button className="bg-[#5fbf00] px-4 py-2 rounded-md text-white hover:bg-[#4ea600] transition-transform transform active:scale-95">
+          {/* Login Button with hover animation */}
+          <button className="bg-[#5fbf00] px-4 py-2 rounded-md text-white hover:bg-[#4ea600] transition-transform transform hover:scale-105">
             Login
-          </button> {/* Login button */}
+          </button>
         </div>
       </header>
 
@@ -75,20 +84,13 @@ function App() {
               <h1 className="text-5xl font-bold mb-4">Book smart.</h1>
               <p className="text-xl mb-8">Track every book, share them with the world (or don't) and find new life-changing reads.</p>
               
+              {/* Join Leafit Button with hover animation */}
               <button
-                className="bg-[#5fbf00] px-6 py-3 rounded-md text-lg font-semibold text-white hover:bg-[#4ea600] transition-transform transform active:scale-95"
-                onClick={() => setShowJoinModal(true)}  // Open modal on click
+                className="bg-[#5fbf00] px-6 py-3 rounded-md text-lg font-semibold text-white hover:bg-[#4ea600] transition-transform transform hover:scale-105"
+                onClick={() => setShowJoinModal(true)}  // Open Join Leafit modal
               >
                 Join Leafit
               </button>
-              {/* Show Book Recommendations Button */}
-              {/*
-              <button
-                className="bg-[#5fbf00] px-6 py-3 rounded-md text-lg font-semibold text-white hover:bg-[#4ea600] transition-transform transform active:scale-95 mt-4"
-                onClick={() => setShowRecommendationsModal(true)}  // Open Book Recommendations modal
-              >
-                Show Book Recommendations
-  </button>*/}
             </div>
           </div>
         </div>
@@ -123,13 +125,13 @@ function App() {
 
       {/* Join Leafit Modal */}
       <Modal show={showJoinModal} onClose={() => setShowJoinModal(false)}>
-        <JoinLeafit />
+        <JoinLeafit onDone={handleJoinDone} />  {/* Pass the handleJoinDone function to JoinLeafit */}
       </Modal>
+
       {/* Book Recommendations Modal */}
-      {/*
       <Modal show={showRecommendationsModal} onClose={() => setShowRecommendationsModal(false)}>
         <BookRecommendations />
-  </Modal>*/}
+      </Modal>
     </div>
   );
 }
