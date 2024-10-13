@@ -1,31 +1,10 @@
 import React, { useState } from 'react';
-import BookRecommendations from './BookRecommendations';
 
-
-const Modal = ({ show, onClose, children }) => {
-  if (!show) return null; // Don't render modal if 'show' is false
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-gray-800 p-6 rounded-lg relative w-96">
-        <button
-          className="absolute top-2 right-2 text-gray-400 hover:text-white"
-          onClick={onClose}
-        >
-          &times;
-        </button>
-        {children}
-      </div>
-    </div>
-  );
-};
-
-const JoinLeafit = () => {
+const JoinLeafit = ({ onDone }) => {
   const [genre, setGenre] = useState('Fiction'); // Default genre is Fiction
   const [favoriteAuthor, setFavoriteAuthor] = useState('');
   const [readingGoals, setReadingGoals] = useState('');
   const [readingPreference, setReadingPreference] = useState('');
-  const [showRecommendationsModal, setShowRecommendationsModal] = useState(false); // Modal state for book recommendations
 
   const handleReset = () => {
     setGenre('Fiction');
@@ -33,29 +12,40 @@ const JoinLeafit = () => {
     setReadingGoals('');
     setReadingPreference('');
   };
-  const handleDone = () => {
-    setShowRecommendationsModal(true);  // Show the book recommendations modal when the "Done" button is clicked
-  };
 
   return (
     <div className="text-center">
       <h2 className="text-2xl font-bold mb-4">Set Your Preferences</h2>
-      
+
       {/* Genre Selection */}
       <div className="mb-6">
         <label className="block text-gray-400 mb-2">Genre</label>
         <div className="flex justify-center space-x-4">
           <button
-            className={`px-4 py-2 rounded-md ${genre === 'Fiction' ? 'bg-[#5fbf00] text-white' : 'bg-gray-200 text-gray-700'}`}
-            onClick={() => setGenre('Fiction')}
+            className={`px-4 py-2 rounded-md transition-transform transform ${
+              genre === 'Mystery' ? 'bg-[#5fbf00] text-white' : 'bg-gray-200 text-gray-700'
+            } hover:bg-[#4ea600] hover:text-white hover:scale-105`}
+            onClick={() => setGenre('Mystery')}
           >
-            Fiction
+            Mystery
           </button>
+
           <button
-            className={`px-4 py-2 rounded-md ${genre === 'Non-Fiction' ? 'bg-[#5fbf00] text-white' : 'bg-gray-200 text-gray-700'}`}
-            onClick={() => setGenre('Non-Fiction')}
+            className={`px-4 py-2 rounded-md transition-transform transform ${
+              genre === 'Romance' ? 'bg-[#5fbf00] text-white' : 'bg-gray-200 text-gray-700'
+            } hover:bg-[#4ea600] hover:text-white hover:scale-105`}
+            onClick={() => setGenre('Romance')}
           >
-            Non-Fiction
+            Romance
+          </button>
+
+          <button
+            className={`px-4 py-2 rounded-md transition-transform transform ${
+              genre === 'Fantasy' ? 'bg-[#5fbf00] text-white' : 'bg-gray-200 text-gray-700'
+            } hover:bg-[#4ea600] hover:text-white hover:scale-105`}
+            onClick={() => setGenre('Fantasy')}
+          >
+            Fantasy
           </button>
         </div>
       </div>
@@ -105,14 +95,12 @@ const JoinLeafit = () => {
         >
           Reset to defaults
         </button>
-        <button 
-        className="bg-[#5fbf00] px-6 py-2 rounded-md text-white"
-        onClick={handleDone}>
+        <button
+          className="bg-[#5fbf00] px-6 py-2 rounded-md text-white transition-transform transform hover:bg-[#4ea600] hover:scale-105"
+          onClick={onDone}  // Invoke the onDone function passed from App.jsx
+        >
           Done
         </button>
-        <Modal show={showRecommendationsModal} onClose={() => setShowRecommendationsModal(false)}>
-        <BookRecommendations />
-      </Modal>
       </div>
     </div>
   );
