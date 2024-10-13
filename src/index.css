@@ -1,3 +1,9 @@
+/* Tailwind Base, Components, and Utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS Variables and Styles */
 :root {
   --primary-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -99,6 +105,7 @@ nav {
   text-decoration: none;
   font-weight: var(--font-weight-medium);
 }
+
 #currentReads a:hover {
   color: var(--link-hover-color);
   text-decoration: underline;
@@ -126,9 +133,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: var(--link-color);
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -140,9 +149,11 @@ button:focus-visible {
     color: var(--text-dark);
     background-color: var(--background-light);
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
