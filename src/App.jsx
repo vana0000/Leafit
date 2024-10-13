@@ -26,7 +26,6 @@ function App() {
             alt="Leafit Logo"
             className="w-36 h-auto" // Adjust the size as needed
           />
-          <span className="font-bold text-xl ml-2"></span> {/* Branding if needed */}
         </div>
         <div className="flex items-center space-x-4 mr-12">
           <button className="bg-[#5fbf00] px-4 py-2 rounded-md text-white hover:bg-[#4ea600] transition-transform transform active:scale-95">Login</button> {/* Updated with click animation */}
@@ -48,7 +47,6 @@ function App() {
             <div className="md:w-1/2 md:pl-8">
               <h1 className="text-5xl font-bold mb-4">Book smart.</h1>
               <p className="text-xl mb-8">Track every book, share them with the world (or don't) and find new life-changing reads.</p>
-              
               <button className="bg-[#5fbf00] px-6 py-3 rounded-md text-lg font-semibold text-white hover:bg-[#4ea600] transition-transform transform active:scale-95">Join Leafit</button> {/* Updated with click animation */}
             </div>
           </div>
@@ -81,6 +79,56 @@ function App() {
           </div>
         </div>
       </main>
+
+      {/* Additional layout section from main branch */}
+      <div id="body2">
+        <header>
+          <nav>
+            <div id="logo">
+              <h2>Logo</h2>
+            </div>
+            <div id="links">
+              <p>link</p>
+              <p>link</p>
+            </div>
+          </nav>
+        </header>
+        <div id="main">
+          <div id="left">
+            <div id="hello" className="box">
+              <h2>Hello <span>Name</span></h2>
+              <p>Reading God</p>
+            </div>
+            <div id="streak" className="box">
+              <h2>Month <span>Streak *</span></h2>
+              <div id="streakBox"></div>
+            </div>
+          </div>
+          <div id="right">
+            <div id="topUserBar">
+              <p>*</p>
+              <p>*</p>
+              <div id="usernameBox">
+                @UserName
+              </div>
+            </div>
+            <div id="currentReads" className="box">
+              <h2>Current Reads</h2>
+              <a href="">Book Title</a>
+              <a href="">Book Title</a>
+            </div>
+            <div id="tasks" className="box">
+              <h2>Task Tracker</h2>
+              <ul>
+                <li>Task</li>
+                <li>Task</li>
+                <li>Task</li>
+                <li>Task</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
