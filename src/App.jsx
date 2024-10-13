@@ -180,7 +180,7 @@ function App() {
         <JoinLeafit onDone={handleJoinDone} />
       </Modal>
 
-      <Modal show={showRecommendationsModal} onClose={() => setShowRecommendationsModal(false)} width="w-[40rem]">
+      <Modal show={showRecommendationsModal} onClose={() => setShowRecommendationsModal(false)} width="w-[100rem]">
         <BookRecommendations onSignUp={handleRecommendationsDone} />
       </Modal>
 

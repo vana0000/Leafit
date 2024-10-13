@@ -1,26 +1,25 @@
-import React from 'react';
+const BookRecommendations = ({ onClose, recommendations }) => {
+  if (!Array.isArray(recommendations) || recommendations.length === 0) {
+    return <p>No recommendations available.</p>;
+  }
 
-const BookRecommendations = ({ onSignUp }) => {
   return (
-    <div className="text-center">
-      <h2 className="text-2xl font-bold mb-4">Book Recommendations</h2>
-      <p className="mb-4">Here are some book recommendations based on your preferences:</p>
-
-      {/* Example book list */}
-      <div className="mb-6">
-        <p><strong>Example Book 1</strong></p>
-        <p><strong>Example Book 2</strong></p>
-        <p><strong>Example Book 3</strong></p>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="p-6 bg-white border rounded-lg shadow-lg overflow-auto max-h-[70vh] max-w-2xl">
+        <h2 className="text-2xl font-bold mb-4">Book Recommendations</h2>
+        <ul>
+          {recommendations.map((book, index) => (
+            <li key={index} className="mb-4 text-gray-600">
+              <strong>{book.title}</strong> by {book.author}
+              <p>{book.summary}</p>
+              <p><em>{book.whyMatch}</em></p>
+            </li>
+          ))}
+        </ul>
+        <button onClick={onClose} className="mt-4 text-[#5fbf00] hover:underline">Close</button>
       </div>
-
-      {/* Continue button that triggers the SignUp modal */}
-      <button
-        className="bg-[#5fbf00] px-4 py-2 rounded-md text-white hover:bg-[#4ea600] transition-transform transform hover:scale-105"
-        onClick={onSignUp}  // This will open the SignUp modal
-      >
-        Go to Dashboard
-      </button>
     </div>
+
   );
 };
 

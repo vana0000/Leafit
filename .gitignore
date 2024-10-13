@@ -1,6 +1,10 @@
 # Python virtual environments
 venv/
 env/
+*.pyc
+__pycache__/
+.env
+api/.env:3 
 
 # Logs
 logs
@@ -28,3 +32,4 @@ dist-ssr
 *.sln
 *.sw?
 
+api/.env
