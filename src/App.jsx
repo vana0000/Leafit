@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Search, Bookmark, MessageCircle, Sparkles } from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import JoinLeafit from './components/Joinleafit';
-import BookRecommendations from './components/BookRecommendations'; // Import BookRecommendations
+import BookRecommendations from './components/BookRecommendations';
+import SignUp from './components/SignUp';
+import Dashboard from './pages/Dashboard';
+import Login from './components/Login';
+import logo from './assets/leafit.png';
+import Slideshow from './components/Slideshow';
+import { Search, Bookmark, MessageCircle, Sparkles } from 'lucide-react'; // Icons
 
 // Modal Component
-const Modal = ({ show, onClose, children }) => {
-  if (!show) return null; // Don't render modal if 'show' is false
-
+const Modal = ({ show, onClose, children, width = 'w-96' }) => {
+  if (!show) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-gray-800 p-6 rounded-lg relative w-96">
+      <div className={`bg-gray-800 p-6 rounded-lg relative ${width}`}>
         <button
           className="absolute top-2 right-2 text-gray-400 hover:text-white"
           onClick={onClose}
@@ -22,6 +27,7 @@ const Modal = ({ show, onClose, children }) => {
   );
 };
 
+// FeatureCard Component
 const FeatureCard = ({ icon, title, description }) => {
   return (
     <div className="bg-gray-700 p-0.5 rounded-lg">
@@ -36,32 +42,77 @@ const FeatureCard = ({ icon, title, description }) => {
   );
 };
 
-function App() {
-  const [showJoinModal, setShowJoinModal] = useState(false);  // Modal state for JoinLeafit
-  const [showRecommendationsModal, setShowRecommendationsModal] = useState(false);  // Modal state for BookRecommendations
+// Main App Component with Router integration
+function AppWrapper() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
+}
 
-  // Handler when "Done" is clicked in JoinLeafit
-  const handleJoinDone = () => {
-    setShowJoinModal(false); // Close the JoinLeafit modal
-    setShowRecommendationsModal(true); // Show the BookRecommendations modal
+function App() {
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showRecommendationsModal, setShowRecommendationsModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const navigate = useNavigate(); // React Router hook to navigate programmatically
+
+
+  const startLoginModalSequence = () => {
+    setShowLoginModal(true);
   };
+
+  const handleLoginDone = () => {
+    setShowLoginModal(false);
+    navigate('/dashboard');
+  };
+
+  const startModalSequence = () => {
+    setShowSignUpModal(true);
+    setShowJoinModal(false);
+    setShowRecommendationsModal(false);
+  };
+
+  // After SignUp is done, show JoinLeafit
+  const handleSignUpDone = () => {
+    setShowSignUpModal(false);
+    setShowJoinModal(true);  // Show JoinLeafit next
+    setShowRecommendationsModal(false);
+  };
+
+  // After JoinLeafit is done, show BookRecommendations
+  const handleJoinDone = () => {
+    setShowJoinModal(false);
+    setShowRecommendationsModal(true);  // Show BookRecommendations next
+  };
+
+  // After BookRecommendations, navigate to Dashboard
+  const handleRecommendationsDone = () => {
+    setShowRecommendationsModal(false);
+    navigate('/dashboard');
+  };
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1f2937] via-[#030712] to-[#030712] text-white flex flex-col relative">
       {/* Header */}
       <header className="p-4 flex justify-between items-center border-b border-gray-600">
         <div className="flex items-center ml-9">
-          {/* Updated logo */}
-          <img 
-            src="https://media.discordapp.net/attachments/1293755238246907906/1294822799294332973/leafit.png?ex=670c6933&is=670b17b3&hm=99d68e6fd1a2e915dcdfa9cacdda5b81bc1d4e722245e68911c2634e0c61ddc2&=&width=2012&height=744"
-            alt="Leafit Logo"
-            className="w-36 h-auto" // Adjust the size as needed
+          <img
+            src={logo}
+            alt="LeafIt Logo"
+            className="w-36 h-auto"
           />
-          <span className="font-bold text-xl ml-2"></span> {/* Branding if needed */}
         </div>
         <div className="flex items-center space-x-4 mr-12">
           {/* Login Button with hover animation */}
-          <button className="bg-[#5fbf00] px-4 py-2 rounded-md text-white hover:bg-[#4ea600] transition-transform transform hover:scale-105">
+          <button className="bg-[#5fbf00] px-4 py-2 rounded-md text-white hover:bg-[#4ea600] transition-transform transform hover:scale-105" onClick={startLoginModalSequence}>
             Login
           </button>
         </div>
@@ -72,68 +123,79 @@ function App() {
         <div className="container mx-auto px-4 pt-20 pb-4 flex-grow">
           <div className="flex flex-col md:flex-row items-center justify-between mb-16">
             <div className="md:w-1/2 mb-8 md:mb-0 relative">
-              <img 
-                src="https://media.discordapp.net/attachments/1293755238246907906/1294796538421313739/Screenshot_2024-10-12_at_5.55.22_PM-removebg-preview.png?ex=670c50be&is=670aff3e&hm=e8de59838ae840812ea197ac06b0dfe294ea6a4d5d0d027bc74fe90a53a05683&=&width=1286&height=776" 
-                width={700} 
-                height={700} 
-                alt="Book illustration" 
-                className="mx-auto relative z-10 bottom-[-40px]" 
-              />
+              {/* Slideshow is placed here */}
+              <Slideshow />
             </div>
             <div className="md:w-1/2 md:pl-8">
-              <h1 className="text-5xl font-bold mb-4">Book smart.</h1>
-              <p className="text-xl mb-8">Track every book, share them with the world (or don't) and find new life-changing reads.</p>
-              
-              {/* Join Leafit Button with hover animation */}
+              <h1 className="text-5xl font-bold mb-4">Explore A New Story</h1>
+              <p className="text-xl mb-8">Need a book recommendation? Leaf it to us!</p>
+
               <button
-                className="bg-[#5fbf00] px-6 py-3 rounded-md text-lg font-semibold text-white hover:bg-[#4ea600] transition-transform transform hover:scale-105"
-                onClick={() => setShowJoinModal(true)}  // Open Join Leafit modal
+                className="bg-[#5fbf00] px-6 py-3 rounded-md text-lg font-semibold text-white hover:bg-[#4ea600] transition-transform transform active:scale-95"
+                onClick={startModalSequence}  // Start modal sequence
               >
-                Join Leafit
+                Join Today
               </button>
             </div>
           </div>
         </div>
 
+        {/* Bottom section with feature cards */}
         <div className="bg-gray-800 py-20">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Feature Cards */}
               <FeatureCard
                 icon={<Search className="text-gray-400" size={24} />}
-                title="Find"
-                description="Search and browse for new books – or find inspiration in other reader's libraries."
+                title="Browse"
+                description="Search through our extensive collection and browse for new books."
               />
               <FeatureCard
                 icon={<Bookmark className="text-gray-400" size={24} />}
                 title="Track"
-                description="Track every book by want to read, currently reading, read and did not finish."
+                description="Keep track of every title you're interested in or currently reading."
               />
               <FeatureCard
                 icon={<MessageCircle className="text-gray-400" size={24} />}
                 title="Connect"
-                description="Explore others reader's bookshelves and follow for their next reads."
+                description="See what others are reading, and follow the hype!"
               />
               <FeatureCard
                 icon={<Sparkles className="text-gray-400" size={24} />}
                 title="Discover"
-                description="Use our set of amazing stats and tools, including AI, to discover new horizons in your reading journey."
+                description="Find the right story for you using our AI technologies."
               />
             </div>
           </div>
         </div>
+        <footer className="bg-gray-900 py-6">
+          <div className="container mx-auto text-center text-gray-400">
+            <p className='text-xl text-white'>By Ahanaful Alam, Ehsan Ahmed, Van Thiang, Vincent Dang @ HackUTA 6</p>
+          </div>
+        </footer>
+
       </main>
 
-      {/* Join Leafit Modal */}
       <Modal show={showJoinModal} onClose={() => setShowJoinModal(false)}>
-        <JoinLeafit onDone={handleJoinDone} />  {/* Pass the handleJoinDone function to JoinLeafit */}
+        <JoinLeafit onDone={handleJoinDone} />
       </Modal>
 
-      {/* Book Recommendations Modal */}
-      <Modal show={showRecommendationsModal} onClose={() => setShowRecommendationsModal(false)}>
-        <BookRecommendations />
+      <Modal show={showRecommendationsModal} onClose={() => setShowRecommendationsModal(false)} width="w-[100rem]">
+        <BookRecommendations onSignUp={handleRecommendationsDone} />
       </Modal>
+
+      <Modal show={showSignUpModal} onClose={() => setShowSignUpModal(false)} width="w-[30rem]">
+        <SignUp onClose={handleSignUpDone} />
+      </Modal>
+
+      <Modal show={showLoginModal} onClose={() => setShowLoginModal(false)} width="w-[30rem]">
+        <Login onCloseLogin={handleLoginDone} />
+      </Modal>
+
+
     </div>
   );
 }
 
-export default App;
+export default AppWrapper;
+

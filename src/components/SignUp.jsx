@@ -16,21 +16,27 @@ const SignUp = ({ onClose }) => {
     if (!agreeTerms) newErrors.agreeTerms = 'Please agree to the Leafit terms';
 
     if (Object.keys(newErrors).length === 0) {
-      // Handle successful signup here
-      console.log('Signup successful');
       onClose();
     } else {
       setErrors(newErrors);
     }
   };
 
+  const handleClose = () => {
+    console.log("Closing SignUp Modal"); // Debug log
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setAgreeTerms(false);
+    setErrors({});
+    onClose();
+  };
+
   return (
     <div className="bg-gray-800 p-8 rounded-lg max-w-md w-full">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Join Leafit</h2>
-        <button onClick={onClose} className="text-gray-400 hover:text-white">&times;</button>
+        <h2 className="text-2xl font-bold text-white">Join Us Today</h2>
       </div>
-      <p className="text-gray-400 mb-6">Sign up and enter a world of amazing books</p>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="email" className="block text-gray-300 mb-2">Email</label>
@@ -73,16 +79,19 @@ const SignUp = ({ onClose }) => {
               checked={agreeTerms}
               onChange={(e) => setAgreeTerms(e.target.checked)}
             />
-            <span className="ml-2 text-gray-300">I agree to abide by the code of conduct & all Leafit policies.</span>
+            <span className="ml-2 text-gray-300">I agree to abide by all LeafIt policies.</span>
           </label>
           {errors.agreeTerms && <p className="text-red-500 text-sm mt-1">{errors.agreeTerms}</p>}
         </div>
         <button
           type="submit"
-          className="w-full bg-indigo-600 text-white rounded-md py-2 font-semibold hover:bg-indigo-700 transition duration-300"
+          className="mb-6 w-full bg-[#5fbf00] px-6 py-2 rounded-md text-white transition-transform transform hover:bg-[#4ea600] hover:scale-105"
         >
-          Join Leafit
+          Join LeafIt
         </button>
+        <p className="text-gray-300 mb-6">Already have an account?{'\u00A0'}
+          <span className='hover:underline cursor-pointer'>Log In</span>
+        </p>
       </form>
     </div>
   );
