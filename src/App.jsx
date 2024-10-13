@@ -12,6 +12,7 @@ const Modal = ({ show, onClose, children, width = 'w-96' }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className={`bg-gray-800 p-6 rounded-lg relative ${width}`}>
         <button
+          className="absolute top-2 right-2 text-gray-400 hover:text-white"
           onClick={onClose}
         >
           &times;
