@@ -6,7 +6,7 @@ import SignUp from './components/SignUp';
 import Dashboard from './pages/Dashboard';
 import Login from './components/Login';
 import logo from './assets/leafit.png';
-import Slideshow from './components/Slideshow'; // Import Slideshow
+import Slideshow from './components/Slideshow';
 import { Search, Bookmark, MessageCircle, Sparkles } from 'lucide-react'; // Icons
 
 // Modal Component
@@ -62,7 +62,7 @@ function App() {
 
   const navigate = useNavigate(); // React Router hook to navigate programmatically
 
-  
+
   const startLoginModalSequence = () => {
     setShowLoginModal(true);
   };
@@ -127,14 +127,14 @@ function App() {
               <Slideshow />
             </div>
             <div className="md:w-1/2 md:pl-8">
-              <h1 className="text-5xl font-bold mb-4">Book smart.</h1>
-              <p className="text-xl mb-8">Track every book, share them with the world (or don't) and find new life-changing reads.</p>
+              <h1 className="text-5xl font-bold mb-4">Explore A New Story</h1>
+              <p className="text-xl mb-8">Need a book recommendation? Leaf it to us!</p>
 
               <button
                 className="bg-[#5fbf00] px-6 py-3 rounded-md text-lg font-semibold text-white hover:bg-[#4ea600] transition-transform transform active:scale-95"
                 onClick={startModalSequence}  // Start modal sequence
               >
-                Finish Account
+                Join Today
               </button>
             </div>
           </div>
@@ -147,27 +147,33 @@ function App() {
               {/* Feature Cards */}
               <FeatureCard
                 icon={<Search className="text-gray-400" size={24} />}
-                title="Find"
-                description="Search and browse for new books – or find inspiration in other reader's libraries."
+                title="Browse"
+                description="Search through our extensive collection and browse for new books."
               />
               <FeatureCard
                 icon={<Bookmark className="text-gray-400" size={24} />}
                 title="Track"
-                description="Track every book by want to read, currently reading, read and did not finish."
+                description="Keep track of every title you're interested in or currently reading."
               />
               <FeatureCard
                 icon={<MessageCircle className="text-gray-400" size={24} />}
                 title="Connect"
-                description="Explore others reader's bookshelves and follow for their next reads."
+                description="See what others are reading, and follow the hype!"
               />
               <FeatureCard
                 icon={<Sparkles className="text-gray-400" size={24} />}
                 title="Discover"
-                description="Use our set of amazing stats and tools, including AI, to discover new horizons in your reading journey."
+                description="Find the right story for you using our AI technologies."
               />
             </div>
           </div>
         </div>
+        <footer className="bg-gray-900 py-6">
+          <div className="container mx-auto text-center text-gray-400">
+            <p className='text-xl text-white'>By Ahanaful Alam, Ehsan Ahmed, Van Thiang, Vincent Dang @ HackUTA 6</p>
+          </div>
+        </footer>
+
       </main>
 
       <Modal show={showJoinModal} onClose={() => setShowJoinModal(false)}>
