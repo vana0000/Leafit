@@ -77,6 +77,7 @@ function App() {
           />
         </div>
         <div className="flex items-center space-x-4 mr-12">
+          {/* Login Button with hover animation */}
           <button className="bg-[#5fbf00] px-4 py-2 rounded-md text-white hover:bg-[#4ea600] transition-transform transform hover:scale-105">
             Login
           </button>
